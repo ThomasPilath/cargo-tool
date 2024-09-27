@@ -1,5 +1,7 @@
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
+This project its a test to learn about Next.js for me and create a tool for Star Citizen game to make calculs and take notes about Hauling.
+
 ## Getting Started
 
 First, install the dependencies with project :
