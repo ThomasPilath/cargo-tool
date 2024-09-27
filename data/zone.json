@@ -1,0 +1,149 @@
+[
+  {
+    "name": "Hurston",
+    "planetList": [
+      {
+        "planetName": "Hurston",
+        "location":
+        [
+          "Lorville",
+          "HDMS Edmond",
+          "HDMS Hadley",
+          "HDMS Oparei",
+          "HDMS Pinewood",
+          "HDMS Stanhope",
+          "HDMS Thedus",
+          "Reclamation & Disposal Orinth"
+        ]
+      },
+      {
+        "planetName": "Arial",
+        "location":
+        [
+          "WIP"
+        ]
+      },
+      {
+        "planetName": "Aberdeen",
+        "location":
+        [
+          "WIP"
+        ]
+      },
+      {
+        "planetName": "Magda",
+        "location":
+        [
+          "WIP"
+        ]
+      },
+      {
+        "planetName": "Ita",
+        "location":[
+          "WIP"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Crusader",
+    "planetList": [
+      {
+        "planetName": "Crusader",
+        "location":
+        [
+          "Orison"
+        ]
+      },
+      {
+        "planetName": "Cellin",
+        "location":
+        [
+          "WIP"
+        ]
+      },
+      {
+        "planetName": "Daymar",
+        "location":
+        [
+          "WIP"
+        ]
+      },
+      {
+        "planetName": "Yela",
+        "location":
+        [
+          "WIP"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "ArcCorp",
+    "planetList": [
+      {
+        "planetName": "ArcCorp",
+        "location":
+        [
+          "Area18"
+        ]
+      },
+      {
+        "planetName": "Lyria",
+        "location":
+        [
+          "WIP"
+        ]
+      },
+      {
+        "planetName": "Wala",
+        "location":
+        [
+          "WIP"
+        ]
+      }
+    ]
+  },
+  {
+    "name": "MicroTech",
+    "planetList": [
+      {
+        "planetName": "MicroTech",
+        "location":
+        [
+        "New Babbage",
+        "Rayari Deltana Research Outpost",
+        "Shubin SM0-10",
+        "Shubin SM0-13",
+        "Shubin SM0-18",
+        "Shubin SM0-22",
+        "Calhoun Pass ES",
+        "Clear View ES",
+        "Nuiqsut ES",
+        "Point Wain ES"
+        ]
+      },
+      {
+        "planetName": "Calliope",
+        "location":
+        [
+          "WIP"
+        ]
+      },
+      {
+        "planetName": "Clio",
+        "location":
+        [
+          "WIP"
+        ]
+      },
+      {
+        "planetName": "Euterpe",
+        "location":
+        [
+          "WIP"
+        ]
+      }
+    ]
+  }
+]
