@@ -1,8 +1,8 @@
 'use client'
 
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/app/components/ui/button";
+import { Checkbox } from "@/app/components/ui/checkbox"
+import { Input } from "@/app/components/ui/input"
 import {
   Table,
   TableBody,
@@ -11,17 +11,16 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/app/components/ui/table"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/app/components/ui/select"
 
 import { useEffect } from "react";
-import { getMoons, getPlanets } from "@/api/getStarmap";
 
 export default function SandBox() {
 

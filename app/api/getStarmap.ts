@@ -1,4 +1,4 @@
-import { useApi } from "@/hook/useApi";
+import { useApi } from "@/app/hook/useApi";
 
 const fetchStarmap = async () => {
   const set = `starmap/star-system?code=STANTON`
@@ -15,16 +15,28 @@ const fetchStarmap = async () => {
 
 export const getPlanets = async () => {
   const data = await fetchStarmap()
-  const planets = data.filter((item: any) => {
+  const filteredData = data.filter((item: CelestialObject) => {
     return item.type === "PLANET";
-    });
+  });
+  const planets = filteredData.map((item: CelestialObject) => ({
+    id: item.id,
+    name: item.name,
+    type: item.type,
+    texture: item.texture
+  }));
   return planets;
 }
 
 export const getMoons = async () => {
   const data = await fetchStarmap()
-  const moons = data.filter((item: any) => {
+  const filteredData = data.filter((item: CelestialObject) => {
     return item.type === "SATELLITE";
     });
-  return moons;
+    const moons = filteredData.map((item: CelestialObject) => ({
+      id: item.id,
+      name: item.name,
+      type: item.type,
+      texture: item.texture
+    }));
+    return moons;
 }

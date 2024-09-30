@@ -1,8 +1,8 @@
 'use client'
 
-import { Button } from "@/components/ui/button";
-import { Checkbox } from "@/components/ui/checkbox"
-import { Input } from "@/components/ui/input"
+import { Button } from "@/app/components/ui/button";
+import { Checkbox } from "@/app/components/ui/checkbox"
+import { Input } from "@/app/components/ui/input"
 import {
   Table,
   TableBody,
@@ -11,59 +11,44 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/components/ui/table"
+} from "@/app/components/ui/table"
 import {
   Select,
   SelectContent,
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from "@/components/ui/select"
+} from "@/app/components/ui/select"
 
-import { useEffect, useState } from "react";
-import zone from "@/data/zone.json"
+import { useEffect } from "react";
+import { storeMoonList, storePlanetList, storeSelectedId, storeUpdateCheck } from "../hook/cargo_tab.store";
+import { getMoons, getPlanets } from "../api/getStarmap";
 
 export default function SandBox() {
-  const [zoneList, setZoneList] = useState<string[]>([""])
-  const [selectedZone, setSelectedZone] = useState("")
-  const [stationCheck, setStationCheck] = useState<boolean>(false)
-  const [selectedLocation, setselectedLocation] = useState<string[]>([])
-  const [tableRows, setTableRows] = useState<number[]>([1]);
+  const planetList = storePlanetList((state) => state.planetList)
+  const updatePlanetList = storePlanetList((state) => state.updatePlanetList)
+  const moonList = storeMoonList((state) => state.moonList)
+  const updateMoonList = storeMoonList((state) => state.updateMoonList)
+  const selectedId = storeSelectedId((state) => state.selectedId)
+  const updateSelectedId = storeSelectedId((state) => state.updateSelectedId)
+  const checkStatus = storeUpdateCheck((state) => state.checkStatus)
+  const updateCheckStatus = storeUpdateCheck((state) => state.updateCheckStatus)
 
   useEffect(() => {
-    const zoneFetch = () => {
-      // récupérer les noms des zones depuis le JSON
-      const list: any = []
-      zone.map((once) => {
-        return list.push(once.name)
-      })
-      return setZoneList(list)
+    const fetchData = async () => {
+      const planets = await getPlanets()
+      updatePlanetList([...planets])
     }
-    zoneFetch()
-  },[zone])
+    fetchData()
+  },[])
 
   useEffect(() => {
-    const fetchLocations = () => {
-      const selectedZoneObject = zone.find((zone) => zone.name === selectedZone)
-      const locations: string[] = []
-      if (selectedZoneObject) {
-        selectedZoneObject.planetList.map((planet) => {
-          if (planet.station != null) {
-            planet.station.map((sta) => {
-              return locations.push(planet.planetName + " - " + sta)
-            });
-          }
-          if (stationCheck == false) {
-            planet.location.map((loc) => {
-              return locations.push(planet.planetName + " - " + loc)
-            });
-          }
-        });
-      }
-      return setselectedLocation(locations)
+    const fetchData = async () => {
+      const moons = await getMoons()
+      updateMoonList([...moons])
     }
-    fetchLocations()
-  }, [selectedZone, stationCheck])
+    fetchData()
+  },[selectedId])
 
   const renderSelect = (name: string) => {
     return (
@@ -72,17 +57,24 @@ export default function SandBox() {
           <SelectValue placeholder="Sélectionner" />
         </SelectTrigger>
         <SelectContent>
-          {selectedLocation.map((location) => {
-            return (
-              <SelectItem key={Math.random()} value={name + " - " + location}>{location}</SelectItem>
-            )
-          })}
+          {
+            (selectedId != 0) ?
+            moonList.map((item: CelestialObjectFiltered) => {
+              return (
+                <SelectItem key={item.id} value={item.id.toString()}>{item.name}</SelectItem>
+              )
+            })
+            :
+            "Sélectionnez une zone"
+          }
         </SelectContent>
       </Select>
     )
   }
 
-
+  const handleCheck = () => {
+    return updateCheckStatus(!checkStatus)
+  }
 
 
   //?TEST
@@ -98,8 +90,9 @@ export default function SandBox() {
     <div>
       <section className="flex flex-col gap-5 items-center mt-10 mx-10">
         <h1 className="text-4xl">
-          SandBox
+          Cargo Tab & Calc
         </h1>
+        <p>{selectedId} | {(checkStatus === true) ? "true" : "false" }</p>
       </section>
       <section className="flex flex-col gap-5 mt-10 mx-10">
         <header className="flex gap-2">
@@ -108,7 +101,7 @@ export default function SandBox() {
               Zone de Cargo : 
             </h2>
             <div className="flex items-center space-x-2">
-              <Checkbox id="OnlyStation" onCheckedChange={() => setStationCheck(!stationCheck)} />
+              <Checkbox id="OnlyStation" onCheckedChange={() => handleCheck()} />
               <label
                 htmlFor="OnlyStation"
                 className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
@@ -117,14 +110,14 @@ export default function SandBox() {
               </label>
             </div>
           </section>
-          <Select onValueChange={(value) =>  setSelectedZone(value)}>
+          <Select onValueChange={(value) =>  updateSelectedId(Number(value))}>
             <SelectTrigger className="w-[180px]">
               <SelectValue placeholder="choisir" />
             </SelectTrigger>
             <SelectContent>
-              {zoneList.map((item: string) => {
+              {planetList.map((item: CelestialObjectFiltered) => {
                 return (
-                  <SelectItem key={zoneList.indexOf(item)} value={item}>{item}</SelectItem>
+                  <SelectItem key={item.id} value={item.id.toString()}>{item.name}</SelectItem>
                 )
               })}
             </SelectContent>
@@ -145,7 +138,6 @@ export default function SandBox() {
             </TableRow>
           </TableHeader>
           <TableBody>
-            {tableRows.map((row) => (
               <TableRow key={Math.random()}>
                 <TableCell className="font-medium w-[180px]">
                   <Input type="number" placeholder="revenu"  />
@@ -160,11 +152,10 @@ export default function SandBox() {
                   <Input type="number" placeholder="volume" />
                 </TableCell>
               </TableRow>
-            ))}
             <TableRow>
-              <TableCell colSpan={4}>
+              {/* <TableCell colSpan={4}>
                 <Button onClick={() => setTableRows([...tableRows, 1])}>+</Button>
-              </TableCell>
+              </TableCell> */}
             </TableRow>
           </TableBody>
         </Table>
