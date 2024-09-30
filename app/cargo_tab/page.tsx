@@ -23,6 +23,7 @@ import {
 import { useEffect } from "react";
 import { storeMoonList, storePlanetList, storeSelectedId, storeUpdateCheck } from "../hook/cargo_tab.store";
 import { getMoons, getPlanets } from "../api/getStarmap";
+import { ThemeToggle } from "../components/theme-toggle";
 
 export default function SandBox() {
   const planetList = storePlanetList((state) => state.planetList)
