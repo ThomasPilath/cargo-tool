@@ -21,26 +21,23 @@ import {
 } from "@/components/ui/select"
 
 import { useEffect } from "react";
-import { useUpdateCountStore, useSaveCountStore } from "@/hook/count.store";
+import { getMoons, getPlanets } from "@/api/getStarmap";
 
 export default function SandBox() {
-  const count =  useUpdateCountStore((state) => state.count)
-  const changeCount =  useUpdateCountStore((state) => state.changeCount)
-  const countTable =  useSaveCountStore((state) => state.countTable)
-  const changeCountTable =  useSaveCountStore((state) => state.addCount)
+
+
 
   useEffect(() => {
-      changeCount(Math.floor(Math.random()*100))
-  },[])
+    const fetchData = async ()  => {
 
-    useEffect(() => {
-      changeCountTable(count)
-    },[count])
+    }
+    fetchData();
+  }, [])
 
   //?TEST
   // useEffect(() => {
-  //   console.log(stationCheck)
-  // },[stationCheck])
+  //   console.log()
+  // },[])
 
   return (
     <div>
@@ -50,13 +47,7 @@ export default function SandBox() {
         </h1>
       </section>
       <section className="flex flex-col gap-5 mt-10 mx-10">
-        <p>{count}</p>
-        <Button
-        onClick={() => changeCount(Math.floor(Math.random()*100))}
-        >
-          Click to change number
-        </Button>
-        <p>Saved count : {Array.from(countTable).join(', ')}</p>
+
       </section>
     </div>
   )
