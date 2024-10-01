@@ -3,7 +3,7 @@ import { create } from "zustand";
 //* Store row of Table
 type RowType = {
   reward: number | string,
-  loading: number | string,
+  loading: string,
   unloading: number[]
 }
 
@@ -21,7 +21,7 @@ export const storeRowList = create<StoreRowListType>((set) => ({
     },
     {
     reward: 0,
-    loading: 0,
+    loading: "Choisir",
     unloading: [0,0]
     }
   ],

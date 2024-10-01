@@ -52,7 +52,7 @@ export default function SandBox() {
           {celestialList.map((planet) => {
             if (planet.type === "PLANET") {
               return (
-                <MenubarSub>
+                <MenubarSub key={planet.id}>
                   <MenubarSubTrigger>{planet.name}</MenubarSubTrigger>
                   <MenubarSubContent>
                     {celestialList.map((moon) => {
