@@ -1,57 +1,53 @@
 import { create } from "zustand";
 
-//* Store status of checkbox
-type updateCheckType = {
-  checkStatus: boolean;
-  updateCheckStatus: (newCheckStatus: boolean) => void
+//* Store row of Table
+type RowType = {
+  reward: number | string,
+  loading: number | string,
+  unloading: number[]
 }
 
-export const storeUpdateCheck = create<updateCheckType>((set) => ({
-  checkStatus: false,
-
-  updateCheckStatus(newCheckStatus) {
-    set({checkStatus: newCheckStatus})
-  }
-}))
-
-//* Store selected planet ID
-type SelectedIdType = {
-  selectedId: number;
-  updateSelectedId: (newId: number) => void
+type StoreRowListType = {
+  rowList: RowType[];
+  updateRowList: (newRowList: RowType[]) => void
 }
 
-export const storeSelectedId = create<SelectedIdType>((set) => ({
-  selectedId: 0,
+export const storeRowList = create<StoreRowListType>((set) => ({
+  rowList: [
+    {
+      reward: "Revenus",
+      loading: "Chargement",
+      unloading: [0,0]
+    },
+    {
+    reward: 0,
+    loading: 0,
+    unloading: [0,0]
+    }
+  ],
 
-  updateSelectedId(newId) {
-    set({selectedId: newId})
+  updateRowList(newRowList) {
+    set({rowList: newRowList})
   }
 }))
 
 //* Store list of planets
-type PlanetListType = {
-  planetList: CelestialObjectFiltered[];
-  updatePlanetList: (newPlanetList: CelestialObjectFiltered[]) => void
+type CelestialObjectFiltered = {
+  id: number;
+  name: string;
+  parent_id: number;
+  type: string;
 }
 
-export const storePlanetList = create<PlanetListType>((set) => ({
-  planetList: [],
-
-  updatePlanetList(newPlanetList) {
-    set({planetList: newPlanetList})
-  }
-}))
-
-//* Store list of moons
-type MoonListType = {
-  moonList: CelestialObjectFiltered[];
-  updateMoonList: (newMoonList: CelestialObjectFiltered[]) => void
+type CelestialListType = {
+  celestialList: CelestialObjectFiltered[];
+  updateCelestialList: (newCelestialList: CelestialObjectFiltered[]) => void
 }
 
-export const storeMoonList = create<MoonListType>((set) => ({
-  moonList: [],
+export const storeCelestialList = create<CelestialListType>((set) => ({
+  celestialList: [],
 
-  updateMoonList(newMoonList) {
-    set({moonList: newMoonList})
+  updateCelestialList(newCelestialList) {
+    set({celestialList: newCelestialList})
   }
 }))

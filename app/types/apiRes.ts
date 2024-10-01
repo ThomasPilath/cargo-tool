@@ -66,13 +66,6 @@ interface CelestialObject {
   model?: Model;
 }
 
-interface CelestialObjectFiltered {
-  id: number;
-  name: string;
-  type: string;
-  texture?: Texture;
-}
-
 interface Data {
   affiliation: Affiliation[];
   aggregated_danger: number;

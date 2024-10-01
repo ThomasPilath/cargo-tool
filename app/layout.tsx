@@ -2,18 +2,7 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import { ThemeProvider } from "next-themes";
-import { ThemeToggle } from "./components/theme-toggle";
-
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
+import Header from "@/components/header";
 
 export const metadata: Metadata = {
   title: "Space Cargo Tools",
@@ -26,22 +15,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr">
-      <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-      >
-        <body
-          className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+    <html lang="fr" suppressHydrationWarning>
+      <body>
+        <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
         >
-          <div className="fixed top-1 left-1">
-            <ThemeToggle />
-          </div>
+          {Header()}
           {children}
-        </body>
-      </ThemeProvider>
+        </ThemeProvider>
+      </body>
     </html>
   );
 }

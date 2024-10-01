@@ -13,30 +13,19 @@ const fetchStarmap = async () => {
   return filteredData;
 }
 
-export const getPlanets = async () => {
+export const getCelestials = async () => {
   const data = await fetchStarmap()
   const filteredData = data.filter((item: CelestialObject) => {
-    return item.type === "PLANET";
+    return (
+      item.type === "PLANET" ||
+      item.type === "SATELLITE"
+    );
   });
   const planets = filteredData.map((item: CelestialObject) => ({
     id: item.id,
     name: item.name,
-    type: item.type,
-    texture: item.texture
+    parent_id: item.parent_id,
+    type: item.type
   }));
   return planets;
-}
-
-export const getMoons = async () => {
-  const data = await fetchStarmap()
-  const filteredData = data.filter((item: CelestialObject) => {
-    return item.type === "SATELLITE";
-    });
-    const moons = filteredData.map((item: CelestialObject) => ({
-      id: item.id,
-      name: item.name,
-      type: item.type,
-      texture: item.texture
-    }));
-    return moons;
 }

@@ -1,8 +1,7 @@
 'use client'
 
-import { Button } from "@/app/components/ui/button";
-import { Checkbox } from "@/app/components/ui/checkbox"
-import { Input } from "@/app/components/ui/input"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input"
 import {
   Table,
   TableBody,
@@ -11,119 +10,86 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from "@/app/components/ui/table"
+} from "@/components/ui/table"
 import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/app/components/ui/select"
+  Menubar,
+  MenubarContent,
+  MenubarItem,
+  MenubarMenu,
+  MenubarSub,
+  MenubarSubContent,
+  MenubarSubTrigger,
+  MenubarTrigger,
+} from "@/components/ui/menubar"
 
-import { useEffect } from "react";
-import { storeMoonList, storePlanetList, storeSelectedId, storeUpdateCheck } from "../hook/cargo_tab.store";
-import { getMoons, getPlanets } from "../api/getStarmap";
-import { ThemeToggle } from "../components/theme-toggle";
+import { useEffect, useState } from "react";
+import { storeCelestialList, storeRowList } from "../hook/cargo_tab.store";
+import { getCelestials } from "../api/getStarmap";
 
 export default function SandBox() {
-  const planetList = storePlanetList((state) => state.planetList)
-  const updatePlanetList = storePlanetList((state) => state.updatePlanetList)
-  const moonList = storeMoonList((state) => state.moonList)
-  const updateMoonList = storeMoonList((state) => state.updateMoonList)
-  const selectedId = storeSelectedId((state) => state.selectedId)
-  const updateSelectedId = storeSelectedId((state) => state.updateSelectedId)
-  const checkStatus = storeUpdateCheck((state) => state.checkStatus)
-  const updateCheckStatus = storeUpdateCheck((state) => state.updateCheckStatus)
+  const celestialList = storeCelestialList((state) => state.celestialList)
+  const updateCelestialList = storeCelestialList((state) => state.updateCelestialList)
+  const rowList = storeRowList((state) => state.rowList)
+  const updateRowList = storeRowList((state) => state.updateRowList)
 
   useEffect(() => {
     const fetchData = async () => {
-      const planets = await getPlanets()
-      updatePlanetList([...planets])
+      const celestials = await getCelestials()
+      return updateCelestialList(celestials)
     }
     fetchData()
   },[])
 
-  useEffect(() => {
-    const fetchData = async () => {
-      const moons = await getMoons()
-      updateMoonList([...moons])
-    }
-    fetchData()
-  },[selectedId])
+  const renderContent = () => {
+    //! TEMPORAIRE => a inclure dans l'objet row
+    const [trigger, setTrigger] = useState("Choisir")
+    //!
 
-  const renderSelect = (name: string) => {
     return (
-      <Select>
-        <SelectTrigger className="w-[180px]">
-          <SelectValue placeholder="Sélectionner" />
-        </SelectTrigger>
-        <SelectContent>
-          {
-            (selectedId != 0) ?
-            moonList.map((item: CelestialObjectFiltered) => {
+      <div>
+        <MenubarTrigger>{trigger}</MenubarTrigger>
+          <MenubarContent>
+          {celestialList.map((planet) => {
+            if (planet.type === "PLANET") {
               return (
-                <SelectItem key={item.id} value={item.id.toString()}>{item.name}</SelectItem>
+                <MenubarSub>
+                  <MenubarSubTrigger>{planet.name}</MenubarSubTrigger>
+                  <MenubarSubContent>
+                    {celestialList.map((moon) => {
+                      if (moon.parent_id === planet.id) {
+                        return (
+                          <MenubarItem key={moon.id} onClick={() => setTrigger(moon.name)}>{moon.name}</MenubarItem>
+                        )
+                      }
+                    })}
+                  </MenubarSubContent>
+                </MenubarSub>
               )
-            })
-            :
-            "Sélectionnez une zone"
-          }
-        </SelectContent>
-      </Select>
+            }
+          })}
+        </MenubarContent>
+      </div>
     )
-  }
-
-  const handleCheck = () => {
-    return updateCheckStatus(!checkStatus)
   }
 
 
   //?TEST
   // useEffect(() => {
-  //   console.table(selectedLocation)
-  // },[selectedLocation])
+  //   console.log(celestialList)
+  // },[celestialList])
 
   // useEffect(() => {
   //   console.log(stationCheck)
   // },[stationCheck])
 
   return (
-    <div>
-      <section className="flex flex-col gap-5 items-center mt-10 mx-10">
-        <h1 className="text-4xl">
+    <section>
+      <header className="flex flex-col gap-5 items-center mt-10 mx-10">
+        <h2 className="text-2xl">
           Cargo Tab & Calc
-        </h1>
-        <p>{selectedId} | {(checkStatus === true) ? "true" : "false" }</p>
-      </section>
-      <section className="flex flex-col gap-5 mt-10 mx-10">
-        <header className="flex gap-2">
-          <section>
-            <h2 className="text-2xl">
-              Zone de Cargo : 
-            </h2>
-            <div className="flex items-center space-x-2">
-              <Checkbox id="OnlyStation" onCheckedChange={() => handleCheck()} />
-              <label
-                htmlFor="OnlyStation"
-                className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
-              >
-                Seulement les Stations
-              </label>
-            </div>
-          </section>
-          <Select onValueChange={(value) =>  updateSelectedId(Number(value))}>
-            <SelectTrigger className="w-[180px]">
-              <SelectValue placeholder="choisir" />
-            </SelectTrigger>
-            <SelectContent>
-              {planetList.map((item: CelestialObjectFiltered) => {
-                return (
-                  <SelectItem key={item.id} value={item.id.toString()}>{item.name}</SelectItem>
-                )
-              })}
-            </SelectContent>
-          </Select>
-        </header>
+        </h2>
+      </header>
+      <main className="flex flex-col gap-5 mt-10 mx-10">
         <Table>
           <TableCaption>Liste des cargo pour les missions prises.</TableCaption>
           <TableHeader>
@@ -131,10 +97,18 @@ export default function SandBox() {
               <TableHead className="w-[100px]">Revenu</TableHead>
               <TableHead>Chargement</TableHead>
               <TableHead>
-                {renderSelect("Depot1")}
+                <Menubar className="w-fit">
+                  <MenubarMenu>
+                    {renderContent()}
+                  </MenubarMenu>
+                </Menubar>
               </TableHead>
               <TableHead>
-                {renderSelect("Depot2")}
+                <Menubar className="w-fit">
+                  <MenubarMenu>
+                    {renderContent()}
+                  </MenubarMenu>
+                </Menubar>
               </TableHead>
             </TableRow>
           </TableHeader>
@@ -144,7 +118,11 @@ export default function SandBox() {
                   <Input type="number" placeholder="revenu"  />
                 </TableCell>
                 <TableCell>
-                  {renderSelect("Chargement")}
+                  <Menubar className="w-fit">
+                    <MenubarMenu>
+                      {renderContent()}
+                    </MenubarMenu>
+                  </Menubar>
                 </TableCell>
                 <TableCell>
                   <Input type="number" placeholder="volume" />
@@ -154,13 +132,13 @@ export default function SandBox() {
                 </TableCell>
               </TableRow>
             <TableRow>
-              {/* <TableCell colSpan={4}>
-                <Button onClick={() => setTableRows([...tableRows, 1])}>+</Button>
-              </TableCell> */}
+              <TableCell colSpan={4}>
+                <Button>+</Button>
+              </TableCell>
             </TableRow>
           </TableBody>
         </Table>
-      </section>
-    </div>
+      </main>
+    </section>
   )
 }

@@ -13,7 +13,50 @@ body {
 }
 
 @layer base {
+
+  /* theme from "https://ui.jln.dev/" */
   :root {
+    --background: 187 59% 100%;
+    --foreground: 187 59% 4%;
+    --muted: 157 37% 94%;
+    --muted-foreground: 157 8% 40%;
+    --popover: 187 59% 100%;
+    --popover-foreground: 187 59% 4%;
+    --card: 0 0% 99%;
+    --card-foreground: 187 59% 3%;
+    --border: 187 7% 92%;
+    --input: 187 7% 92%;
+    --primary: 187 27% 35%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 157 27% 35%;
+    --secondary-foreground: 0 0% 100%;
+    --accent: 217 27% 35%;
+    --accent-foreground: 217 27% 95%;
+    --destructive: 4 99% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --ring: 187 27% 35%;
     --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: 187 40% 2%;
+    --foreground: 187 33% 98%;
+    --muted: 157 37% 6%;
+    --muted-foreground: 157 8% 60%;
+    --popover: 187 40% 2%;
+    --popover-foreground: 187 33% 98%;
+    --card: 187 40% 3%;
+    --card-foreground: 187 33% 99%;
+    --border: 187 7% 14%;
+    --input: 187 7% 14%;
+    --primary: 187 27% 35%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 157 27% 35%;
+    --secondary-foreground: 0 0% 100%;
+    --accent: 217 27% 35%;
+    --accent-foreground: 217 27% 95%;
+    --destructive: 4 99% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --ring: 187 27% 35%;
   }
 }
