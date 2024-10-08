@@ -22,43 +22,54 @@ import {
   MenubarTrigger,
 } from "@/components/ui/menubar"
 
-import { useEffect, useState } from "react";
-import { useCelestialStore, useRowStore } from "@/hook/store/cargoTool.store";
+import { useEffect } from "react";
+import { Row, useCelestialStore, useHeaderRowStore, useRowStore } from "@/app/multi-tool/cargoTool.store";
 import { getCelestials } from "@/hook/getStarmap";
 
+type SelectedTarget = {
+  rowIndex?: number,
+  unloadIndex?: number
+}
+
 export default function CargoTool() {
-  const celestial = useCelestialStore((state) => state.list)
-  const updateCelestial = useCelestialStore((state) => state.updateList)
-  const rowList = useRowStore((state) => state.list)
-  const updateRowList = useRowStore((state) => state.updateList)
+  const { celestialList, updateCelestialList } = useCelestialStore()
+  const { rowList, updateRowList, updateLoading, updateUnloading, updateReward } = useRowStore();
+  const { headerRow, updateHeaderRow } = useHeaderRowStore();
 
   useEffect(() => {
     const fetchData = async () => {
       const data = await getCelestials()
-      return updateCelestial(data)
+      return updateCelestialList(data)
     }
     fetchData()
   },[])
 
-  const renderContent = () => {
-    //! TEMPORAIRE => a inclure dans l'objet row
-    const [trigger, setTrigger] = useState("Choisir")
-    //!
+  
+  const renderSelect = (target: SelectedTarget) => {
+    const selectOne = (target: SelectedTarget, newValue: string) => {
+      if(target.rowIndex != null) {
+        updateLoading(target.rowIndex, newValue)
+      }
+      if(target.unloadIndex != null) {
+        const newUnloading = [...headerRow.unloading]
+        newUnloading[target.unloadIndex] = newValue
+        return updateHeaderRow({...headerRow, unloading: newUnloading})
+      }
+    }
 
     return (
       <div>
-        <MenubarTrigger>{trigger}</MenubarTrigger>
           <MenubarContent>
-          {celestial.map((planet) => {
+          {celestialList.map((planet) => {
             if (planet.type === "PLANET") {
               return (
                 <MenubarSub key={planet.id}>
                   <MenubarSubTrigger>{planet.name}</MenubarSubTrigger>
                   <MenubarSubContent>
-                    {celestial.map((moon) => {
+                    {celestialList.map((moon) => {
                       if (moon.parent_id === planet.id) {
                         return (
-                          <MenubarItem key={moon.id} onClick={() => setTrigger(moon.name)}>{moon.name}</MenubarItem>
+                          <MenubarItem key={moon.id} onClick={() => selectOne(target, moon.name)}>{moon.name}</MenubarItem>
                         )
                       }
                     })}
@@ -72,16 +83,6 @@ export default function CargoTool() {
     )
   }
 
-
-  //?TEST
-  // useEffect(() => {
-  //   console.log(celestialList)
-  // },[celestialList])
-
-  // useEffect(() => {
-  //   console.log(stationCheck)
-  // },[stationCheck])
-
   return (
     <section className="flex flex-col items-center gap-4 border-4 rounded-2xl p-1">
       <h3 className="text-2xl">
@@ -91,48 +92,66 @@ export default function CargoTool() {
         <TableCaption>Liste des cargo pour les missions prises.</TableCaption>
 
         <TableHeader>
-          <TableRow>
-            <TableHead>Revenu</TableHead>
-            <TableHead>Chargement</TableHead>
-            <TableHead>
-              <Menubar>
-                <MenubarMenu>
-                  {renderContent()}
-                </MenubarMenu>
-              </Menubar>
-            </TableHead>
-            <TableHead>
-              <Menubar>
-                <MenubarMenu>
-                  {renderContent()}
-                </MenubarMenu>
-              </Menubar>
-            </TableHead>
+          <TableRow key={Math.random()*1000}>
+            <TableHead>{headerRow.reward}</TableHead>
+            <TableHead>{headerRow.loading}</TableHead>
+                {headerRow.unloading.map((once, id) => {
+                  return (
+                    <TableHead>
+                      <Menubar>
+                        <MenubarMenu>
+                          <MenubarTrigger>{once}</MenubarTrigger>
+                          {renderSelect({unloadIndex: id})}
+                        </MenubarMenu>
+                      </Menubar>
+                    </TableHead>
+                  )
+                })}
           </TableRow>
         </TableHeader>
 
         <TableBody>
-            <TableRow key={Math.random()}>
-              <TableCell className="font-medium w-[150px]">
-                <Input type="number" placeholder="revenu"  />
-              </TableCell>
+        {rowList.map((row, index) => (
+          <TableRow key={index}>
+            <TableCell>
+              <Input type="number" value={row.reward} onChange={(event) => {
+                const newReward = parseInt(event.target.value)
+                updateReward(index, newReward)
+              }} />
+            </TableCell>
+            <TableCell>
+              <Menubar>
+                <MenubarMenu>
+                  <MenubarTrigger>{row.loading}</MenubarTrigger>
+                  {renderSelect({rowIndex: index})}
+                </MenubarMenu>
+              </Menubar>
+            </TableCell>
+            {rowList[index].unloading.map((once, onceIndex) => (
               <TableCell>
-                <Menubar>
-                  <MenubarMenu>
-                    {renderContent()}
-                  </MenubarMenu>
-                </Menubar>
+                <Input type="number" value={once} onChange={(event) => {
+                  const newUnloading = [...rowList[index].unloading]
+                  newUnloading[onceIndex] = parseFloat(event.target.value)
+                  updateUnloading(index, newUnloading)
+                }} />
               </TableCell>
-              <TableCell>
-                <Input type="number" placeholder="volume" />
-              </TableCell>
-              <TableCell className="text-right">
-                <Input type="number" placeholder="volume" />
-              </TableCell>
-            </TableRow>
-          <TableRow>
+            ))}
+          </TableRow>
+        ))}
+          <TableRow key={Math.random()*10000}>
             <TableCell colSpan={4}>
-              <Button>+</Button>
+              <Button
+                onClick={() => {
+                  const newRow: Row = {
+                    reward: 0,
+                    loading: "Choisir",
+                    unloading: [0,0],
+                  };
+                  updateRowList([...rowList, newRow]);
+                }}
+              >
+                +
+              </Button>
             </TableCell>
           </TableRow>
         </TableBody>
