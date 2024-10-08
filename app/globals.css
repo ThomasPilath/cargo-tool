@@ -2,8 +2,13 @@
 @tailwind components;
 @tailwind utilities;
 
-body {
-  font-family: Arial, Helvetica, sans-serif;
+@font-face {
+  font-family: "DosisBold";
+  src: url("../public/fonts/Dosis/Dosis-SemiBold.ttf");
+}
+@font-face {
+  font-family: "DosisRegular";
+  src: url("../public/fonts/Dosis/Dosis-Regular.ttf");
 }
 
 @layer utilities {
@@ -11,61 +16,82 @@ body {
     text-wrap: balance;
   }
 
+  /*to suppress araw in number input*/
   input[type="number"]::-webkit-inner-spin-button,
   input[type="number"]::-webkit-outer-spin-button {
       -webkit-appearance: none;
       margin: 0;
   }
 
-  input[type="number"] {
+  /*to suppress araw in number input on mozilla*/
+  /* input[type="number"] {
       -moz-appearance: textfield;
-  }
+  } */
 }
 
 @layer base {
   /* theme from "https://ui.jln.dev/" */
   :root {
+    --border: 187 7% 92%;
+    --input: 187 7% 92%;
+    --ring: 187 27% 35%;
     --background: 187 59% 100%;
     --foreground: 187 59% 4%;
+    --primary: 187 27% 35%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 157 27% 35%;
+    --secondary-foreground: 0 0% 100%;
     --muted: 157 37% 94%;
     --muted-foreground: 157 8% 40%;
+    --accent: 217 27% 35%;
+    --accent-foreground: 217 27% 95%;
     --popover: 187 59% 100%;
     --popover-foreground: 187 59% 4%;
     --card: 0 0% 99%;
     --card-foreground: 187 59% 3%;
-    --border: 187 7% 92%;
-    --input: 187 7% 92%;
+    --destructive: 4 99% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --destructive-border: 0 0% 100%;
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    --success-border: 0 0% 100%;
+    --warning: 0 72% 50%;
+    --warning-foreground: 0 90% 70%;
+    --warning-border: 0 70% 35%;
+    --info: 198 88% 48%;
+    --info-foreground: 199 95 73%;
+    --info-border: 201 96% 32%;
+  }
+
+  .dark {
+    --border: 187 7% 14%;
+    --input: 187 7% 14%;
+    --ring: 187 27% 35%;
+    --background: 187 40% 2%;
+    --foreground: 187 33% 98%;
     --primary: 187 27% 35%;
     --primary-foreground: 0 0% 100%;
     --secondary: 157 27% 35%;
     --secondary-foreground: 0 0% 100%;
-    --accent: 217 27% 35%;
-    --accent-foreground: 217 27% 95%;
-    --destructive: 4 99% 45%;
-    --destructive-foreground: 0 0% 100%;
-    --ring: 187 27% 35%;
-    --radius: 0.5rem;
-  }
-
-  .dark {
-    --background: 187 40% 2%;
-    --foreground: 187 33% 98%;
     --muted: 157 37% 6%;
     --muted-foreground: 157 8% 60%;
+    --accent: 217 27% 35%;
+    --accent-foreground: 217 27% 95%;
     --popover: 187 40% 2%;
     --popover-foreground: 187 33% 98%;
     --card: 187 40% 3%;
     --card-foreground: 187 33% 99%;
-    --border: 187 7% 14%;
-    --input: 187 7% 14%;
-    --primary: 187 27% 35%;
-    --primary-foreground: 0 0% 100%;
-    --secondary: 157 27% 35%;
-    --secondary-foreground: 0 0% 100%;
-    --accent: 217 27% 35%;
-    --accent-foreground: 217 27% 95%;
     --destructive: 4 99% 45%;
     --destructive-foreground: 0 0% 100%;
-    --ring: 187 27% 35%;
+    --destructive-border: 0 0% 100%;
+    --success: 142 76% 36%;
+    --success-foreground: 0 0% 100%;
+    --success-border: 0 0% 100%;
+    --warning: 0 72% 50%;
+    --warning-foreground: 0 90% 70%;
+    --warning-border: 0 70% 35%;
+    --info: 198 88% 48%;
+    --info-foreground: 199 95 73%;
+    --info-border: 201 96% 32%;
   }
 }

@@ -3,11 +3,18 @@ import type { Config } from "tailwindcss";
 const config: Config = {
     darkMode: ["class"],
     content: [
-    "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+		fontFamily: {
+			'sans': ['ui-sans-serif', 'system-ui'],
+      'serif': ['ui-serif', 'Georgia'],
+      'mono': ['ui-monospace', 'SFMono-Regular'],
+      'display': ['DosisBold'],
+      'body': ['DosisRegular'],
+      'dosisLight': ['DosisLight'],
+		},
 		extend: {
 			colors: {
 				border: "hsl(var(--border))",
@@ -59,12 +66,6 @@ const config: Config = {
 					foreground: "hsl(var(--info-foreground))",
 					border: "hsl(var(--info-border))",
 				},
-			},
-			borderRadius: {
-				lg: `var(--radius)`,
-				md: `calc(var(--radius) - 2px)`,
-				sm: "calc(var(--radius) - 4px)",
-				pill: "64px",
 			},
 		}
   },
