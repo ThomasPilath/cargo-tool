@@ -23,15 +23,15 @@ import {
 } from "@/components/ui/menubar"
 
 import { useEffect } from "react";
-import { Row, useCelestialStore, useHeaderRowStore, useRowStore } from "@/app/multi-tool/cargoTool.store";
-import { getCelestials } from "@/hook/getStarmap";
+import { Row, useCelestialStore, useHeaderRowStore, useRowStore } from "@/app/sc_tool/sc_tool.store";
+import { getCelestials } from "@/hook/useStarCitizenApi";
 
 type SelectedTarget = {
   rowIndex?: number,
   unloadIndex?: number
 }
 
-export default function CargoTool() {
+export default function StarCitizenTool() {
   const { celestialList, updateCelestialList } = useCelestialStore()
   const { rowList, updateRowList, updateLoading, updateUnloading, updateReward } = useRowStore();
   const { headerRow, updateHeaderRow } = useHeaderRowStore();
@@ -86,27 +86,27 @@ export default function CargoTool() {
   return (
     <section className="flex flex-col items-center gap-4 border-4 rounded-2xl p-1">
       <h3 className="text-2xl">
-        Cargo Tab & Calc
+        Star Citizen Hauling Tab
       </h3>
       <Table>
-        <TableCaption>Liste des cargo pour les missions prises.</TableCaption>
+        <TableCaption>Tableau d'aide a la livraison dans Star Citize.</TableCaption>
 
         <TableHeader>
           <TableRow key={Math.random()*1000}>
             <TableHead>{headerRow.reward}</TableHead>
             <TableHead>{headerRow.loading}</TableHead>
-                {headerRow.unloading.map((once, id) => {
-                  return (
-                    <TableHead>
-                      <Menubar>
-                        <MenubarMenu>
-                          <MenubarTrigger>{once}</MenubarTrigger>
-                          {renderSelect({unloadIndex: id})}
-                        </MenubarMenu>
-                      </Menubar>
-                    </TableHead>
-                  )
-                })}
+            {headerRow.unloading.map((once, id) => {
+              return (
+                <TableHead key={id}>
+                  <Menubar>
+                    <MenubarMenu>
+                      <MenubarTrigger>{once}</MenubarTrigger>
+                      {renderSelect({unloadIndex: id})}
+                    </MenubarMenu>
+                  </Menubar>
+                </TableHead>
+              )
+            })}
           </TableRow>
         </TableHeader>
 
@@ -128,13 +128,13 @@ export default function CargoTool() {
               </Menubar>
             </TableCell>
             {rowList[index].unloading.map((once, onceIndex) => (
-              <TableCell>
-                <Input type="number" value={once} onChange={(event) => {
-                  const newUnloading = [...rowList[index].unloading]
-                  newUnloading[onceIndex] = parseFloat(event.target.value)
-                  updateUnloading(index, newUnloading)
-                }} />
-              </TableCell>
+            <TableCell key={onceIndex}>
+              <Input type="number" value={once} onChange={(event) => {
+                const newUnloading = [...rowList[index].unloading]
+                newUnloading[onceIndex] = parseFloat(event.target.value)
+                updateUnloading(index, newUnloading)
+              }} />
+            </TableCell>
             ))}
           </TableRow>
         ))}
