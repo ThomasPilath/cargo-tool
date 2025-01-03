@@ -1,7 +1,7 @@
 const useStarCitizenApi = async (set: string) => {
   try {
     const res = await fetch(
-    `https://api.starcitizen-api.com/${process.env.SC_KEY}/v1/live/${set}`,
+    `https://api.starcitizen-api.com/${process.env.NEXT_PUBLIC_SC_KEY}/v1/live/${set}`,
     {
       headers: {
         "Content-Type": "application/json",
